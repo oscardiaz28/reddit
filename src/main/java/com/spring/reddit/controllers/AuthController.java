@@ -1,5 +1,6 @@
 package com.spring.reddit.controllers;
 
+import com.spring.reddit.controllers.dto.LoginRequest;
 import com.spring.reddit.controllers.dto.RegisterRequest;
 import com.spring.reddit.service.AuthService;
 import jakarta.websocket.server.PathParam;
@@ -29,8 +30,9 @@ public class AuthController {
         return new ResponseEntity<>("Account activate successfully", HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public String login(){
+    @PostMapping("/s")
+    public String login(@RequestBody LoginRequest loginRequest){
+
         return "User logged";
     }
 
