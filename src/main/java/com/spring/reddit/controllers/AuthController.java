@@ -1,8 +1,10 @@
 package com.spring.reddit.controllers;
 
+import com.spring.reddit.controllers.dto.AuthResponse;
 import com.spring.reddit.controllers.dto.LoginRequest;
 import com.spring.reddit.controllers.dto.RegisterRequest;
 import com.spring.reddit.service.AuthService;
+import com.spring.reddit.service.UserDetailsServiceImpl;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, UserDetailsServiceImpl userDetailsService) {
         this.authService = authService;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/signup")
@@ -30,10 +34,10 @@ public class AuthController {
         return new ResponseEntity<>("Account activate successfully", HttpStatus.OK);
     }
 
-    @PostMapping("/s")
-    public String login(@RequestBody LoginRequest loginRequest){
-
-        return "User logged";
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest){
+        AuthResponse authResponse = authService.login(loginRequest);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
 }
