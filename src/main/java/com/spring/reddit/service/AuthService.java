@@ -1,8 +1,8 @@
 package com.spring.reddit.service;
 
-import com.spring.reddit.controllers.dto.AuthResponse;
-import com.spring.reddit.controllers.dto.LoginRequest;
-import com.spring.reddit.controllers.dto.RegisterRequest;
+import com.spring.reddit.dto.AuthResponse;
+import com.spring.reddit.dto.LoginRequest;
+import com.spring.reddit.dto.RegisterRequest;
 import com.spring.reddit.exceptions.RedditException;
 import com.spring.reddit.model.NotificationEmail;
 import com.spring.reddit.model.User;

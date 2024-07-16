@@ -1,4 +1,4 @@
-package com.spring.reddit.controllers.dto;
+package com.spring.reddit.dto;
 
 import org.springframework.http.HttpStatus;
 

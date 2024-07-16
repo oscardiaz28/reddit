@@ -1,11 +1,10 @@
 package com.spring.reddit.controllers;
 
-import com.spring.reddit.controllers.dto.AuthResponse;
-import com.spring.reddit.controllers.dto.LoginRequest;
-import com.spring.reddit.controllers.dto.RegisterRequest;
+import com.spring.reddit.dto.AuthResponse;
+import com.spring.reddit.dto.LoginRequest;
+import com.spring.reddit.dto.RegisterRequest;
 import com.spring.reddit.service.AuthService;
 import com.spring.reddit.service.UserDetailsServiceImpl;
-import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

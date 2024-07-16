@@ -1,10 +1,9 @@
 package com.spring.reddit.exceptions;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.spring.reddit.controllers.dto.ErrorResponseDto;
+import com.spring.reddit.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
