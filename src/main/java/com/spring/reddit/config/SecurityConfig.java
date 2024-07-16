@@ -1,6 +1,8 @@
 package com.spring.reddit.config;
 
 import com.spring.reddit.exceptions.JwtAuthenticationEntryPoint;
+import com.spring.reddit.security.JwtTokenFilter;
+import com.spring.reddit.security.JwtUtils;
 import com.spring.reddit.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +27,9 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -34,6 +41,7 @@ public class SecurityConfig {
                     http.anyRequest().authenticated();
                 })
                 .exceptionHandling( handler -> handler.authenticationEntryPoint( jwtAuthenticationEntryPoint ) )
+                .addFilterBefore( new JwtTokenFilter(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
     }
     @Bean
