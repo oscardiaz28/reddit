@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/subreddit")
+@RequestMapping("/api/subreddits")
 @AllArgsConstructor
 @Slf4j
 public class SubredditController {
@@ -27,6 +27,5 @@ public class SubredditController {
     public ResponseEntity<List<SubredditDto>> getAllSubreddit(){
         return new ResponseEntity<>(subredditService.getAll(), HttpStatus.OK);
     }
-
 
 }

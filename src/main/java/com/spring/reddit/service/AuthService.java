@@ -43,6 +43,12 @@ public class AuthService {
         this.jwtUtils = jwtUtils;
     }
 
+    public User getCurrentUser(){
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         return userRepository.findByUsername(authentication.getPrincipal().toString())
+                         .orElseThrow( () -> new RedditException("User not found") );
+    }
+
     @Transactional
     public void signup(RegisterRequest registerRequest){
         User user = new User();
