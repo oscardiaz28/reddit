@@ -25,32 +25,30 @@ public class PostService {
     private final SubredditRepository subredditRepository;
     private final PostRepository postRepository;
     private final AuthService authService;
+    private final PostMapper postMapper;
 
     public PostResponse save(PostDto postDto){
         Subreddit subreddit = subredditRepository.findByName(postDto.getSubredditName())
                         .orElseThrow( () -> new RedditException("Subreddit not found "));
         User user = authService.getCurrentUser();
-        Post post = PostMapper.dtoToPost( postDto, subreddit, user );
-
+        Post post = postMapper.dtoToPost( postDto, subreddit, user );
         Post postSaved = postRepository.save(post);
-
-        return PostMapper.postToDto(postSaved);
-        // TODO: COMPLETAR METODO PARA GUADAR POST, Y CREAR OBJETO POST RESPONSE PARA EVITAR EL BUCLE
+        return postMapper.postToDto(postSaved);
     }
 
     public PostResponse getPostById(Long id){
         Post post = postRepository.findById(id).orElseThrow( () -> new RedditException("Post not found") );
-        return PostMapper.postToDto(post);
+        return postMapper.postToDto(post);
     }
 
     public PostResponse getPostByUrl(String url){
         Post post = postRepository.findByUrl(url).orElseThrow( () -> new RedditException("Post not found") );
-        return PostMapper.postToDto(post);
+        return postMapper.postToDto(post);
     }
 
     public List<PostResponse> getAll(){
         List<PostResponse> posts = postRepository.findAll().stream()
-                .map( post -> PostMapper.postToDto(post) )
+                .map( post -> postMapper.postToDto(post) )
                 .collect(Collectors.toList());
         return posts;
     }

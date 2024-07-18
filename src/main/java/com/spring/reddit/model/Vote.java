@@ -1,8 +1,11 @@
 package com.spring.reddit.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @Entity
 public class Vote {
