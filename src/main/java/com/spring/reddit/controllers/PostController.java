@@ -27,10 +27,23 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id){
+        PostResponse response = postService.getPostById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/url/{url}")
+    public ResponseEntity<?> getByUrl(@PathVariable String url){
+        PostResponse response = postService.getPostByUrl(url);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping
     public List<PostResponse> getAll(){
         return postService.getAll();
     }
+
 
 
 }

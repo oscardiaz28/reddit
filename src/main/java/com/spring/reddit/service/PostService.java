@@ -38,6 +38,16 @@ public class PostService {
         // TODO: COMPLETAR METODO PARA GUADAR POST, Y CREAR OBJETO POST RESPONSE PARA EVITAR EL BUCLE
     }
 
+    public PostResponse getPostById(Long id){
+        Post post = postRepository.findById(id).orElseThrow( () -> new RedditException("Post not found") );
+        return PostMapper.postToDto(post);
+    }
+
+    public PostResponse getPostByUrl(String url){
+        Post post = postRepository.findByUrl(url).orElseThrow( () -> new RedditException("Post not found") );
+        return PostMapper.postToDto(post);
+    }
+
     public List<PostResponse> getAll(){
         List<PostResponse> posts = postRepository.findAll().stream()
                 .map( post -> PostMapper.postToDto(post) )

@@ -10,8 +10,11 @@ import java.time.Instant;
 
 public class PostMapper {
     public static Post dtoToPost(PostDto dto, Subreddit subreddit, User user){
+        String rawName = dto.getPostName();
+        String url = rawName.trim().replace(" ", "_");
         Post post = new Post();
-        post.setPostName(dto.getPostName());
+        post.setPostName(rawName);
+        post.setUrl(url);
         post.setDescription(dto.getDescription());
         post.setUser(user);
         post.setSubreddit(subreddit);
