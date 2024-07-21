@@ -43,7 +43,7 @@ public class PostMapper {
                 .subreddit(post.getSubreddit().getName())
                 .voteCount(post.getVoteCount())
                 .commentCount(comments.size())
-                //.duration( getDuration(post) )
+                .duration( getDuration(post) )
                 .build();
     }
 

@@ -38,6 +38,11 @@ public class SecurityConfig {
                 .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )
                 .authorizeHttpRequests( http -> {
                     http.requestMatchers("/api/auth/**").permitAll();
+                    /**
+                     * Indica que se debe haber creado un SecurityContext para la solicitud, contiene detalles sobre
+                     * la autenticacion del usuario.
+                     * Debe contenedor un principal autenticado, es decir un usuario autenticado.
+                     */
                     http.anyRequest().authenticated();
                 })
                 .exceptionHandling( handler -> handler.authenticationEntryPoint( jwtAuthenticationEntryPoint ) )

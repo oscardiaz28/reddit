@@ -2,6 +2,7 @@ package com.spring.reddit.service;
 
 import com.spring.reddit.dto.AuthResponse;
 import com.spring.reddit.dto.LoginRequest;
+import com.spring.reddit.dto.RefreshTokenRequest;
 import com.spring.reddit.dto.RegisterRequest;
 import com.spring.reddit.exceptions.RedditException;
 import com.spring.reddit.model.NotificationEmail;
@@ -19,8 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthService {
@@ -31,16 +31,19 @@ public class AuthService {
     private final MailService mailService;
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtils jwtUtils;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository,
                        VerificationTokenRepository verificationTokenRepository, MailService mailService,
-                       UserDetailsServiceImpl userDetailsService, JwtUtils jwtUtils){
+                       UserDetailsServiceImpl userDetailsService, JwtUtils jwtUtils,
+                       RefreshTokenService refreshTokenService){
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.mailService = mailService;
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public User getCurrentUser(){
@@ -71,8 +74,12 @@ public class AuthService {
         String password = loginRequest.getPassword();
         Authentication authentication = this.authentication(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtUtils.createToken(authentication);
-        return new AuthResponse(authentication.getPrincipal().toString(), token, "user login");
+        Map<String, Object> result = jwtUtils.createToken(authentication, jwtUtils.getJwtExpirationTime());
+
+        return new AuthResponse(authentication.getPrincipal().toString(),
+                result.get("token").toString(),
+                refreshTokenService.generateRefreshToken().getToken(),
+                (Instant) result.get("time"), "user login");
     }
 
     private Authentication authentication(String email, String password) {
@@ -87,6 +94,18 @@ public class AuthService {
                 userDetails.getUsername(),
                 userDetails.getPassword(),
                 userDetails.getAuthorities());
+    }
+
+    public AuthResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtUtils.generateTokenWithUsername(refreshTokenRequest.getUsername());
+        return new AuthResponse(
+                refreshTokenRequest.getUsername(),
+                token,
+                refreshTokenRequest.getRefreshToken(),
+                Instant.now().plusMillis(jwtUtils.getJwtExpirationTime()),
+                ""
+        );
     }
 
     private String generateVerificationToken(User user){
